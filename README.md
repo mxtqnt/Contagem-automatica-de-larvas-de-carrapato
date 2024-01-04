@@ -4,7 +4,7 @@ Objetivo é automatizar o processo de contagem de larvas sobreviventes aos agent
 
 ### Primeira fase
 Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.
-![](https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true){: heigth="50%" width="50%"}
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true" alt="frame original" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
 | Necessidade de video com câmera estática       | Solucionado |
@@ -13,14 +13,14 @@ Coletar video de duração suficiente em ambiente controlado com contraste ao fu
 
 ### Segunda fase 
 Reconhecer larvas pelo tratamento de cada frame de forma individual e azer a contagem de larvas detectadas por frame.
-![](https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true){: heigth="50%" width="50%"}
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true" alt="frame tratado" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
 | Ruído ao fundo, reconhecendo falhas no papel como larvas       | Em andamento |
 
 ### Terceira fase
 Sinalizar a área de cada larva.
-![](https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/circuladas.png?raw=true){: heigth="50%" width="50%"}
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/circuladas.png?raw=true" alt="larvas circuladas" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
 | Larvas muito próximas       | Em andamento |
