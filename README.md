@@ -3,7 +3,8 @@
 Objetivo é automatizar o processo de contagem de larvas sobreviventes aos agentes selecionados, para o Doutorado de Isabela Santos - UFG.
 
 ### Primeira fase
-Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.
+Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.      
+
 <img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true" alt="frame original" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
@@ -12,14 +13,16 @@ Coletar video de duração suficiente em ambiente controlado com contraste ao fu
 | Maior qualidade na gravação       | Solucionado |
 
 ### Segunda fase 
-Reconhecer larvas pelo tratamento de cada frame de forma individual e azer a contagem de larvas detectadas por frame.
+Reconhecer larvas pelo tratamento de cada frame de forma individual e azer a contagem de larvas detectadas por frame.     
+
 <img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true" alt="frame tratado" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
 | Ruído ao fundo, reconhecendo falhas no papel como larvas       | Em andamento |
 
 ### Terceira fase
-Sinalizar a área de cada larva.
+Sinalizar a área de cada larva.     
+
 <img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/circuladas.png?raw=true" alt="larvas circuladas" width="50%" height="50%">
 | Problema               | Status                                                |
 | ----------------- | ---------------------------------------------------------------- |
