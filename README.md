@@ -31,8 +31,6 @@ Sinalizar a área de cada larva.
 | ------------- | ------------- |
 |Larvas muito próximas | Em andamento|
 
-
-
 ## Próximas fases
 - Traçar a movimentação de cada larva e diagnosticar atividade ou não.
 - Inserir dados na base.
