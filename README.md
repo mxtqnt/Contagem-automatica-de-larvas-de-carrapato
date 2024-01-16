@@ -5,9 +5,6 @@ Objetivo é automatizar o processo de contagem de larvas sobreviventes aos agent
 ### Primeira fase
 Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.      
 
-
-
-
 <img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true" alt="frame original" width="50%" height="50%">
 
 |Problema   | Status|
