@@ -1,19 +1,57 @@
 import cv2
+import time
 import numpy as np 
+
+def circulos_internos(circulos):
+    circulos = sorted(circulos, key=lambda x: x['radius'], reverse=True) 
+
+    indices_para_remover = set()
+
+    for i in range(len(circulos)):
+        for j in range(i + 1, len(circulos)):
+            distancia_entre_centros = ((circulos[i]['center'][0] - circulos[j]['center'][0]) ** 2 +
+                                       (circulos[i]['center'][1] - circulos[j]['center'][1]) ** 2) ** 0.5
+
+            if distancia_entre_centros + circulos[j]['radius'] <= circulos[i]['radius']:
+                indices_para_remover.add(j)
+            elif distancia_entre_centros < circulos[i]['radius'] + circulos[j]['radius']:
+                indices_para_remover.add(j)
+
+    circulos_filtrados = [circulos[i] for i in range(len(circulos)) if i not in indices_para_remover]
+
+    radii = [circulos_filtrados['radius'] for circulos_filtrados in circulos_filtrados]
+    media_radius = sum(radii) / len(radii)
+
+    circulos_filtrados = [circle for circle in circulos_filtrados if abs(circle['radius'] - media_radius) <= 0.9 * media_radius]
+                  
+    return circulos_filtrados
+
 def mapear(imagem, contornos):
+    dadosCirculo = []
     for contorno in contornos:
         (x, y), radius = cv2.minEnclosingCircle(contorno)
         center = (int(x), int(y))
         radius = int(radius)
-        cv2.circle(imagem, center, radius, (0, 0, 255), 2)
+        data = { "center" : center,
+                  "radius" :  radius}
+        dadosCirculo.append(data)
+
+    circulos_filtrados =  circulos_internos(dadosCirculo)
+
+    i = 1
+    for circulo in circulos_filtrados:
+        cv2.circle(imagem, circulo['center'], circulo['radius'], (0, 0, 255), 2)
+        cv2.putText(imagem, str(i), circulo['center'], cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
         cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
         cv2.imshow('Circuladas', imagem)
         cv2.resizeWindow('Circuladas', 1440//2, 1440//2)
+        i = i + 1
+    return imagem
 
 def erosion(image):
-    kernel = np.ones((0, 0), np.uint8) 
-    image = cv2.erode(image, kernel, iterations=1) 
+    kernel = np.ones((5, 5), np.uint8) 
+    image = cv2.dilate(image, kernel, iterations=1) 
     return image
 
 def numero_de_larvas_frame(image):
@@ -54,7 +92,8 @@ def crop_video(caminho_video, x, y, width, height):
         image = erosion(image)
 
         numero_de_larvas, contornos = numero_de_larvas_frame(image)
-        mapear(frame, contornos)
+        imagem = mapear(frame, contornos)
+        cv2.imwrite(('img_contagem\\' + str(i) + '.png'), imagem)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
