@@ -36,7 +36,7 @@ def circulos_internos(circulos):
     radii = [circulos_filtrados['radius'] for circulos_filtrados in circulos_filtrados]
     media_radius = sum(radii) / len(radii)
 
-    circulos_filtrados = [circle for circle in circulos_filtrados if abs(circle['radius'] - media_radius) <= 0.9 * media_radius]
+    circulos_filtrados = [circle for circle in circulos_filtrados if abs(circle['radius'] - media_radius) <= 0.95 * media_radius]
                   
     return circulos_filtrados
 
@@ -66,7 +66,7 @@ def mapear(imagem, contornos):
     return imagem, circulos_filtrados
 
 def erosion(image):
-    kernel = np.ones((5, 5), np.uint8) 
+    kernel = np.ones((8, 8), np.uint8) 
     image = cv2.dilate(image, kernel, iterations=1) 
     return image
 
@@ -85,6 +85,23 @@ def aplicar_threshold(frame):
     _, thresholded_frame = cv2.threshold(frame, 127, 255, cv2.THRESH_BINARY)
     return thresholded_frame
 
+def encontrar_maior_intervalo(array):
+    array.sort()
+    maior_intervalo = []
+    atual_intervalo = [array[0]]
+
+    for i in range(1, len(array)):
+        if array[i] == array[i - 1] + 1:
+            atual_intervalo.append(array[i])
+        else:
+            if len(atual_intervalo) > len(maior_intervalo):
+                maior_intervalo = atual_intervalo
+            atual_intervalo = [array[i]]
+
+    if len(atual_intervalo) > len(maior_intervalo):
+        maior_intervalo = atual_intervalo
+
+    return maior_intervalo
 
 def crop_video(caminho_video, x, y, width, height):
     cap = cv2.VideoCapture(caminho_video)
@@ -99,9 +116,9 @@ def crop_video(caminho_video, x, y, width, height):
             break
         cropped_frame = frame
 
-        cv2.namedWindow('Original', cv2.WINDOW_NORMAL)
-        cv2.imshow('Original', cropped_frame)
-        cv2.resizeWindow('Original', 1440//2, 1440//2)
+        # cv2.namedWindow('Original', cv2.WINDOW_NORMAL)
+        # cv2.imshow('Original', cropped_frame)
+        # cv2.resizeWindow('Original', 1440//2, 1440//2)
 
         image = aplicar_threshold(cropped_frame)
         image = erosion(image)
@@ -126,7 +143,10 @@ def crop_video(caminho_video, x, y, width, height):
     dados_filtrados = [item for item in larvasporframe if item['contagem'] == qntlarvas]
 
     framescertos = [item['frame'] for item in larvasporframe if item['contagem'] == qntlarvas]
-    excluir_frames(framescertos)
+
+    intervalo = encontrar_maior_intervalo(framescertos)
+
+    excluir_frames(intervalo)
 
     cap.release()
     cv2.destroyAllWindows()
