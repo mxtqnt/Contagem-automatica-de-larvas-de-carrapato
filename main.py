@@ -1,6 +1,20 @@
 import cv2
 import time
 import numpy as np 
+import os
+from collections import Counter
+
+def encontrar_mais_recorrentes(larvasframe):
+    contagem = Counter(larvasframe)
+    tres_maiores = contagem.most_common(3)
+
+    for valor, frequencia in tres_maiores:
+        print(f"Valor: {valor}, Recorrência: {frequencia}")
+
+    mais_recorrente = max(tres_maiores, key=lambda x: x[1])
+
+    print(f"\nO valor mais recorrente é {mais_recorrente[0]} com {mais_recorrente[1]} ocorrências.")
+    return mais_recorrente[0]
 
 def circulos_internos(circulos):
     circulos = sorted(circulos, key=lambda x: x['radius'], reverse=True) 
@@ -43,11 +57,13 @@ def mapear(imagem, contornos):
         cv2.circle(imagem, circulo['center'], circulo['radius'], (0, 0, 255), 2)
         cv2.putText(imagem, str(i), circulo['center'], cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
-        cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
-        cv2.imshow('Circuladas', imagem)
-        cv2.resizeWindow('Circuladas', 1440//2, 1440//2)
         i = i + 1
-    return imagem
+
+    cv2.putText(imagem, str(len(circulos_filtrados)), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+    cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
+    cv2.imshow('Circuladas', imagem)
+    cv2.resizeWindow('Circuladas', 1440//2, 1440//2)
+    return imagem, circulos_filtrados
 
 def erosion(image):
     kernel = np.ones((5, 5), np.uint8) 
@@ -59,8 +75,6 @@ def numero_de_larvas_frame(image):
     contornos, _ = cv2.findContours(arestas.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     numero_de_larvas = len(contornos)
     cv2.putText(image, str(numero_de_larvas), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-
-    
     cv2.namedWindow('Contagem', cv2.WINDOW_NORMAL)
     cv2.imshow('Contagem', image)
     cv2.resizeWindow('Contagem', 1440//2, 1440//2)
@@ -71,12 +85,13 @@ def aplicar_threshold(frame):
     _, thresholded_frame = cv2.threshold(frame, 127, 255, cv2.THRESH_BINARY)
     return thresholded_frame
 
+
 def crop_video(caminho_video, x, y, width, height):
     cap = cv2.VideoCapture(caminho_video)
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     frame_size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-
+    larvasporframe = []
     i = 0
     while True:
         ret, frame = cap.read()
@@ -92,15 +107,38 @@ def crop_video(caminho_video, x, y, width, height):
         image = erosion(image)
 
         numero_de_larvas, contornos = numero_de_larvas_frame(image)
-        imagem = mapear(frame, contornos)
+        imagem, circulos_frame = mapear(frame, contornos)
+        data = {
+                    "frame" : i,
+                    "contagem": len(circulos_frame)
+        }
+        larvasporframe.append(data)
+
         cv2.imwrite(('img_contagem\\' + str(i) + '.png'), imagem)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         i = i + 1 
+    
+    contagens = [item['contagem'] for item in larvasporframe]
+    qntlarvas = encontrar_mais_recorrentes(contagens)
+
+    dados_filtrados = [item for item in larvasporframe if item['contagem'] == qntlarvas]
+
+    framescertos = [item['frame'] for item in larvasporframe if item['contagem'] == qntlarvas]
+    excluir_frames(framescertos)
 
     cap.release()
     cv2.destroyAllWindows()
+
+def excluir_frames(lista_manter):
+    lista_manter = ["img_contagem\\" + str(item) + ".png" for item in lista_manter]
+    dir = os.listdir("img_contagem\\")
+    for file in dir:
+        file = "img_contagem\\" + file
+        if file not in lista_manter:
+            os.remove(file)
+
 
 caminho_video = 'videoalta.mov'
 
