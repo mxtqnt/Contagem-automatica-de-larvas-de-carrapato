@@ -1,7 +1,7 @@
 import cv2
 import numpy
 
-from parametros import VERBOSO, DEBUG
+from parametros import VERBOSO
 from contagem import numero_de_larvas_frame, mapear
 from arquivos import salvar_frame
 
@@ -21,9 +21,13 @@ def crop_video(caminho_video, valor_erosao):
         imagem_tratada = erosion(imagem_tratada, valor_erosao)
 
         _, contornos = numero_de_larvas_frame(imagem_tratada)
-        imagem_mapeada, circulos_frame = mapear(frame, contornos)
+        
+        h, w = imagem_tratada.shape
+        imagem_branca = numpy.ones((h, w, 3), dtype=numpy.uint8) * 255
+        imagem_mapeada, circulos_frame = mapear(imagem_branca, contornos)
         data = { "frame" : i,
-                 "contagem": len(circulos_frame)}
+                 "contagem": len(circulos_frame),
+                 "cordenadas" : circulos_frame}
         larvas_por_frame.append(data)
 
         caminho = 'app\\imagens\\' + str (i) + '.png'

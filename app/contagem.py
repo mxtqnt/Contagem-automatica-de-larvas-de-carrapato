@@ -1,4 +1,6 @@
 import cv2
+import numpy
+import matplotlib.pyplot as plt
 
 from parametros import VERBOSO, DEBUG
 from selecao import circulos_internos
@@ -11,7 +13,7 @@ def numero_de_larvas_frame(imagem):
     numero_de_larvas = len(contornos)
 
     if DEBUG:
-        cv2.putText(imagem, str(numero_de_larvas), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        cv2.putText(imagem, str(numero_de_larvas), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (154, 60, 85), 2)
     
     h, w = imagem.shape
 
@@ -37,18 +39,16 @@ def mapear(imagem, contornos):
 
     circulos_filtrados =  circulos_internos(dados_Circulo)
 
-    for indice, circulo in enumerate(circulos_filtrados, start=1):
+    for indice, circulo in enumerate(circulos_filtrados, start=0):
         centro = circulo['center']
         raio = circulo['radius']
 
-        if DEBUG:
-            cv2.circle(imagem, centro, raio, (0, 0, 255), 2)
-            cv2.putText(imagem, str(indice), centro, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        cv2.circle(imagem, centro, raio, (0, 0, 0), -1)
 
     h, w, _ = imagem.shape
 
     if DEBUG:
-        cv2.putText(imagem, str(len(circulos_filtrados)), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        cv2.putText(imagem, str(len(circulos_filtrados)), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (154, 60, 85), 2)
         cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
         cv2.imshow('Circuladas', imagem)
         cv2.resizeWindow('Circuladas', h//2, w//2)
