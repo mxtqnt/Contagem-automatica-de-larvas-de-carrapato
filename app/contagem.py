@@ -1,6 +1,4 @@
 import cv2
-import numpy
-import matplotlib.pyplot as plt
 
 from parametros import VERBOSO, DEBUG
 from selecao import circulos_internos
@@ -42,13 +40,16 @@ def mapear(imagem, contornos):
 
     circulos_filtrados =  circulos_internos(dados_Circulo)
 
-    for indice, circulo in enumerate(circulos_filtrados, start=0):
+    for circulo in circulos_filtrados:
         centro = circulo['center']
         raio = circulo['radius']
 
         cv2.circle(imagem, centro, raio, (0, 0, 0), -1)
 
-    h, w = imagem.shape
+    if len(imagem.shape) == 3:
+        h, w, _ = imagem.shape
+    elif len(imagem.shape) == 2:
+        h, w = imagem.shape
 
     if DEBUG:
         cv2.putText(imagem, str(len(circulos_filtrados)), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (154, 60, 85), 2)

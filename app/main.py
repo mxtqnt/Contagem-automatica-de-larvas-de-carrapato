@@ -2,11 +2,12 @@ import time
 import pandas as pd
 from parametros import ANALISE
 
-from tratamento import crop_video
+from tratamento import crop_video, return_acompanhamento
 from selecao import encontrar_mais_recorrentes, encontrar_maior_intervalo_sequencial
-from arquivos import excluir_frames, salvar_video_seguro
-from analisar import capturar_video_vivas, resultado_larva
-from planilha import criar_planilha, inserir_dado
+from arquivos import excluir_frames
+from analisar import capturar_video_vivas
+
+time_inicio = time.time()
 
 video_path = "app\\videoalta.mov"
 valor_erosao = 8
@@ -21,9 +22,9 @@ intervalo = encontrar_maior_intervalo_sequencial(frames_quantidade_certa)
 excluir_frames(intervalo)
 
 frames_quantidade_certa = [item for item in larvas_por_frame if item["frame"] in intervalo]
-analise = capturar_video_vivas(frames_quantidade_certa, intervalo)
+analise, rois= capturar_video_vivas(frames_quantidade_certa, intervalo)
 
-frames = len(frames_quantidade_certa)
+frames = len(intervalo)
 larvas = quantidade_real_larvas
 
 planilha = pd.DataFrame(index=range(larvas), columns=range(frames))
@@ -36,20 +37,25 @@ for indice, frame in enumerate(analise, start=0):
         numero_larva = larva['numero_larva']
         planilha.at[larva['numero_larva'], indice] = presenca
 
-mortas = 0
-vivas = 0
+mortas, vivas = 0, 0
+rois = rois['analise']
 
-for indice in range(36):
+roi_mortas = []
+for indice, larva in enumerate(rois, start=0):
     dados_larva = planilha.iloc[indice]
-    status = sum(1 for item in dados_larva if item == 0) >= 0.3 * len(dados_larva)
+    status = any(x == 0 for x in dados_larva)
     if status:
         vivas = vivas + 1
         print("Larva " + str(indice) + " está viva!")
     else:
         mortas = mortas + 1
+        roi_mortas.append(larva)
         print("Larva " + str(indice) + " está morta!")
 
-print("Mortas: " + str(mortas) + " Vivas: " + str(vivas))
-time.sleep(5)
+print("Mortas: " + str(mortas) + " Vivas: " + str(vivas)) 
+planilha.to_csv('analise.csv', index=False)
+time_final = time.time()
 
-planilha.to_csv('app\\analise.csv', index=False)
+return_acompanhamento("app\\videoalta.mov", roi_mortas)
+
+print("Tempo de análise: " + str(time_final - time_inicio))

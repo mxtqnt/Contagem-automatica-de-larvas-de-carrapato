@@ -1,5 +1,5 @@
 from collections import Counter
-from parametros import VERBOSO, DEBUG
+from parametros import VERBOSO
 
 def circulos_internos(circulos):
     if VERBOSO:
@@ -32,9 +32,10 @@ def encontrar_mais_recorrentes(larvas_frame):
         print("Encontrando contagem mais recorrende e definindo número total.")
     contagem = Counter(larvas_frame)
     tres_maiores = contagem.most_common(3)
-
-    for valor, frequencia in tres_maiores:
-        print(f"Valor: {valor}, Recorrência: {frequencia}")
+    
+    if VERBOSO:
+        for valor, frequencia in tres_maiores:
+            print(f"Valor: {valor}, Recorrência: {frequencia}")
 
     mais_recorrente = max(tres_maiores, key=lambda x: x[1])
     print(f"\nO valor mais recorrente é {mais_recorrente[0]} com {mais_recorrente[1]} ocorrências.")

@@ -1,8 +1,7 @@
 import numpy
 import cv2
-import time
 
-from parametros import VERBOSO, ANALISE
+from parametros import VERBOSO
 
 def capturar_video_vivas(larvas_por_frame, frames):
     if VERBOSO:
@@ -26,7 +25,8 @@ def capturar_video_vivas(larvas_por_frame, frames):
             roi = frame[y:y+largura, x:x+largura]
             pretos = numpy.sum(roi == 0)
             larva = {   "numero_larva" : numero_larva,
-                        "presença" : pretos}
+                        "presença" : pretos,
+                        "cordenada" : [(x, y), (x+largura, y+largura)]}
             frame = cv2.rectangle(frame, (x, y), (x+largura, y+largura), (255, 0, 255), 1) 
             frame = cv2.putText(frame, ('Presença: ' + str(pretos)), (x, y + largura + 10), cv2.FONT_HERSHEY_SIMPLEX , 0.3, (255, 0, 255), 1, cv2.LINE_AA) 
 
@@ -36,7 +36,6 @@ def capturar_video_vivas(larvas_por_frame, frames):
                     "analise" : lista_roi}
         data_frame.append(data)
         numero_frame = numero_frame + 1
-        print(numero_frame)
 
         if len(frame.shape) == 3:
             h, w, _ = frame.shape
@@ -49,13 +48,8 @@ def capturar_video_vivas(larvas_por_frame, frames):
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        # time.sleep(1)
-    return data_frame
 
-def resultado_larva(dados):
-    diferencas = numpy.diff(dados)
-    variacao_media = numpy.mean(diferencas)
-    return variacao_media
+        primeiroframe =  data_frame[0]
+        # rois = [item['cordenada'] for item in primeiroframe]
     
-# dados = [441, 420, 420, 399, 333, 336, 312, 285, 345, 339, 312, 291, 240, 264, 213, 186, 105, 105, 141, 111, 51, 24, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-# resultado_larva(dados)
+    return data_frame, primeiroframe
