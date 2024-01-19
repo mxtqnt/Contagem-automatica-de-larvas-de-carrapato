@@ -22,9 +22,13 @@ def crop_video(caminho_video, valor_erosao):
 
         _, contornos = numero_de_larvas_frame(imagem_tratada)
         
-        h, w = imagem_tratada.shape
+        if len(imagem_tratada.shape) == 3:
+            h, w, _ = imagem_tratada.shape
+        elif len(imagem_tratada.shape) == 2:
+            h, w = imagem_tratada.shape
+
         imagem_branca = numpy.ones((h, w, 3), dtype=numpy.uint8) * 255
-        imagem_mapeada, circulos_frame = mapear(imagem_branca, contornos)
+        imagem_mapeada, circulos_frame = mapear(imagem_tratada, contornos)
         data = { "frame" : i,
                  "contagem": len(circulos_frame),
                  "cordenadas" : circulos_frame}

@@ -2,7 +2,7 @@ import numpy
 import cv2
 import time
 
-from parametros import VERBOSO
+from parametros import VERBOSO, ANALISE
 
 def capturar_video_vivas(larvas_por_frame, frames):
     if VERBOSO:
@@ -38,7 +38,10 @@ def capturar_video_vivas(larvas_por_frame, frames):
         numero_frame = numero_frame + 1
         print(numero_frame)
 
-        h, w, _ = frame.shape
+        if len(frame.shape) == 3:
+            h, w, _ = frame.shape
+        elif len(frame.shape) == 2:
+            h, w = frame.shape
 
         cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
         cv2.imshow('frame', frame)
@@ -47,7 +50,12 @@ def capturar_video_vivas(larvas_por_frame, frames):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         # time.sleep(1)
+    return data_frame
 
-    with open('analise.txt', 'a',  encoding="UTF-8") as f:
-        f.write(str(data_frame))
-        f.write(' ')
+def resultado_larva(dados):
+    diferencas = numpy.diff(dados)
+    variacao_media = numpy.mean(diferencas)
+    return variacao_media
+    
+# dados = [441, 420, 420, 399, 333, 336, 312, 285, 345, 339, 312, 291, 240, 264, 213, 186, 105, 105, 141, 111, 51, 24, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# resultado_larva(dados)

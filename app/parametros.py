@@ -1,2 +1,2 @@
-VERBOSO = False
+VERBOSO = True
 DEBUG = True

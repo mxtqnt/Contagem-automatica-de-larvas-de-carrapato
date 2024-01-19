@@ -26,7 +26,12 @@ def salvar_video_seguro(diretorio_imagens):
 
     lista_arquivos = sorted(glob.glob(os.path.join(diretorio_imagens, '*.png')))
     primeira_imagem = cv2.imread(lista_arquivos[0])
-    altura, largura, _ = primeira_imagem.shape
+
+    if len(primeira_imagem.shape) == 3:
+        altura, largura, _ = primeira_imagem.shape
+    elif len(primeira_imagem.shape) == 2:
+        altura, largura = primeira_imagem.shape
+        
     video_saida = cv2.VideoWriter(nome_video_saida, cv2.VideoWriter_fourcc(*'H264'), fps, (largura, altura))
 
     for caminho_imagem in lista_arquivos:
