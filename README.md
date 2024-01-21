@@ -13,6 +13,8 @@ Coletar video de duração suficiente em ambiente controlado com contraste ao fu
 |Maior qualidade na gravação | Solucionado|
 |Larvas saindo da área de cobertura | Em andamento|
 
+
+
 ### Segunda fase 
 Reconhecer larvas pelo tratamento de cada frame de forma individual e fazer a contagem de larvas detectadas por frame.     
 
