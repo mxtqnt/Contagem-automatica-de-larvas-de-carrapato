@@ -2,8 +2,6 @@
 
 Objetivo é automatizar o processo de contagem de larvas sobreviventes aos agentes selecionados, para o Doutorado de Isabela Santos - UFG.
 
-
-
 ### Primeira fase
 Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.      
 
