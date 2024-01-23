@@ -1,11 +1,10 @@
 import time
-import pandas as pd
-from parametros import ANALISE
+import csv
+from parametros import ANALISE, LARVAS_POR_FRAME
 
-from tratamento import crop_video, return_acompanhamento
+from tratamento import crop_video
 from selecao import encontrar_mais_recorrentes, encontrar_maior_intervalo_sequencial
-from arquivos import excluir_frames
-from analisar import capturar_video_vivas
+from analisar import acompanhar_larvas, acompanhar_larvas_mortas
 
 time_inicio = time.time()
 
@@ -17,45 +16,37 @@ larvas_por_frame = crop_video(video_path, valor_erosao)
 lista_contagens = [item['contagem'] for item in larvas_por_frame]
 quantidade_real_larvas = encontrar_mais_recorrentes(lista_contagens)
 frames_quantidade_certa = [item['frame'] for item in larvas_por_frame if item['contagem'] == quantidade_real_larvas]
-
 intervalo = encontrar_maior_intervalo_sequencial(frames_quantidade_certa)
-excluir_frames(intervalo)
 
-frames_quantidade_certa = [item for item in larvas_por_frame if item["frame"] in intervalo]
-analise, rois= capturar_video_vivas(frames_quantidade_certa, intervalo)
+frameinicial = intervalo[0]
 
-frames = len(intervalo)
-larvas = quantidade_real_larvas
+for dicionario in larvas_por_frame:
+    if dicionario.get('frame') == frameinicial:
+        cordenadas_larvas = dicionario['cordenadas']
+        break
 
-planilha = pd.DataFrame(index=range(larvas), columns=range(frames))
+matriz = acompanhar_larvas(video_path, cordenadas_larvas, len(larvas_por_frame))
 
-for indice, frame in enumerate(analise, start=0):
-    numero_frame = frame['frame']
-    analise = frame["analise"]
-    for larva in analise:
-        presenca = larva['presença']
-        numero_larva = larva['numero_larva']
-        planilha.at[larva['numero_larva'], indice] = presenca
+with open('dados_frame.csv', 'w', newline='') as arquivo_csv:
+    escritor_csv = csv.writer(arquivo_csv)
+    for linha in matriz:
+        escritor_csv.writerow(linha)
 
 mortas, vivas = 0, 0
-rois = rois['analise']
 
-roi_mortas = []
-for indice, larva in enumerate(rois, start=0):
-    dados_larva = planilha.iloc[indice]
-    status = any(x == 0 for x in dados_larva)
-    if status:
-        vivas = vivas + 1
-        print("Larva " + str(indice) + " está viva!")
+cordenadas_mortas =  []
+for index, larva in enumerate(matriz, start=0):
+    if 0 in larva:
+        vivas += 1
+        print(str(index) + " está viva" + str(cordenadas_larvas[index]['center']))
     else:
-        mortas = mortas + 1
-        roi_mortas.append(larva)
-        print("Larva " + str(indice) + " está morta!")
+        mortas += 1
+        cordenadas_mortas.append(cordenadas_larvas[index])
+        print(str(index) + " está morta" + str(cordenadas_larvas[index]['center']))
 
-print("Mortas: " + str(mortas) + " Vivas: " + str(vivas)) 
-planilha.to_csv('analise.csv', index=False)
-time_final = time.time()
+print("Mortas: " + str(mortas))
+print("Vivas: " + str(vivas))
 
-return_acompanhamento("app\\videoalta.mov", roi_mortas)
+acompanhar_larvas_mortas(video_path, cordenadas_mortas, len(larvas_por_frame))
 
-print("Tempo de análise: " + str(time_final - time_inicio))
+print(str(time.time() - time_inicio))

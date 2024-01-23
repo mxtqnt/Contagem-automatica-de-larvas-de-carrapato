@@ -56,4 +56,5 @@ def mapear(imagem, contornos):
         cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
         cv2.imshow('Circuladas', imagem)
         cv2.resizeWindow('Circuladas', h//2, w//2)
-    return imagem, circulos_filtrados
+
+    return circulos_filtrados
