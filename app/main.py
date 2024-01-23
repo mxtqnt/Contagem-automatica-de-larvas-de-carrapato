@@ -38,15 +38,13 @@ cordenadas_mortas =  []
 for index, larva in enumerate(matriz, start=0):
     if 0 in larva:
         vivas += 1
-        print(str(index) + " está viva" + str(cordenadas_larvas[index]['center']))
     else:
         mortas += 1
         cordenadas_mortas.append(cordenadas_larvas[index])
-        print(str(index) + " está morta" + str(cordenadas_larvas[index]['center']))
 
 print("Mortas: " + str(mortas))
 print("Vivas: " + str(vivas))
 
 acompanhar_larvas_mortas(video_path, cordenadas_mortas, len(larvas_por_frame))
 
-print(str(time.time() - time_inicio))
+print("Tempo de processamento: " + str(time.time() - time_inicio) + " segundos.")
