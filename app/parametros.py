@@ -1,2 +1,3 @@
 VERBOSO = False
 DEBUG = False
+SINALIZAR = True

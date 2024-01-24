@@ -1,16 +1,17 @@
 import numpy
 import cv2
 
-from parametros import VERBOSO, DEBUG
+from parametros import VERBOSO, DEBUG, SINALIZAR
 
 def acompanhar_larvas(caminho_video, cordenadas_larvas, quantidade_frames):
+
     if VERBOSO:
         print("Recortando área selecionada do video.")
+
     cap = cv2.VideoCapture(caminho_video)
-
     data_frame = [[None] * (quantidade_frames) for _ in range(len(cordenadas_larvas))]
-
     numero_frame = 0
+
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -47,14 +48,25 @@ def acompanhar_larvas(caminho_video, cordenadas_larvas, quantidade_frames):
                     break
                 
     cap.release()
+
     cv2.destroyAllWindows()
     return data_frame
 
 
-def acompanhar_larvas_mortas(caminho_video, cordenadas_larvas, quantidade_frames):
+def acompanhar_larvas_mortas(caminho_video, cordenadas_larvas, nomevideo):
     if VERBOSO:
         print("Recortando área selecionada do video.")
     cap = cv2.VideoCapture(caminho_video)
+
+    if SINALIZAR:
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
+        largura = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        altura = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        
+        fourcc = cv2.VideoWriter_fourcc(*'avc1')  
+        caminho_saida = 'sinalizadas\\' + nomevideo + 'mp4'
+        print("Sinalizadas salvo em: " + str(caminho_saida))
+        out = cv2.VideoWriter(caminho_saida, fourcc, fps, (largura, altura), isColor=False)
 
     while True:
         ret, frame = cap.read()
@@ -84,8 +96,13 @@ def acompanhar_larvas_mortas(caminho_video, cordenadas_larvas, quantidade_frames
                 cv2.resizeWindow('Mortas', int(h//3), int(w//3))
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-                
+            
+            if SINALIZAR:
+                out.write(frame)
     cap.release()
+    if SINALIZAR:
+        out.release()
+
     cv2.destroyAllWindows()
 
 def aplicar_threshold(frame):

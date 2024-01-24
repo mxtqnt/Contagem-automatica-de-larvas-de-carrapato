@@ -1,7 +1,6 @@
 import time
 import csv
 import os
-from parametros import ANALISE, LARVAS_POR_FRAME
 
 from tratamento import crop_video
 from selecao import encontrar_mais_recorrentes, encontrar_maior_intervalo_sequencial
@@ -17,6 +16,11 @@ matrizcsv[0][0], matrizcsv[0][1], matrizcsv[0][2], matrizcsv[0][3] = 'Video', 'V
 for numero_video, video in enumerate(os.listdir(caminho), start=1):
     time_inicio = time.time()
     video_path = caminho + video
+    
+    ponto = video.find(".")
+    if ponto != -1:
+        nomevideo = video[:ponto + 1]
+
     print("Analisando: " + video)
 
     larvas_por_frame = crop_video(video_path)
@@ -50,7 +54,7 @@ for numero_video, video in enumerate(os.listdir(caminho), start=1):
 
     print("Mortas: " + str(mortas))
     print("Vivas: " + str(vivas))
-    acompanhar_larvas_mortas(video_path, cordenadas_mortas, len(larvas_por_frame))
+    acompanhar_larvas_mortas(video_path, cordenadas_mortas, nomevideo)
 
     print("Tempo de processamento: " + str(time.time() - time_inicio) + " segundos.")
 
