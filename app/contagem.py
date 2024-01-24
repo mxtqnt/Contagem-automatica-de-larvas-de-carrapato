@@ -21,7 +21,7 @@ def numero_de_larvas_frame(imagem):
     if DEBUG:
         cv2.namedWindow('Contagem', cv2.WINDOW_NORMAL)
         cv2.imshow('Contagem', imagem)
-        cv2.resizeWindow('Contagem', h//2, w//2)
+        cv2.resizeWindow('Contagem', h//4, w//4)
     return numero_de_larvas, contornos
 
 
@@ -55,6 +55,6 @@ def mapear(imagem, contornos):
         cv2.putText(imagem, str(len(circulos_filtrados)), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (154, 60, 85), 2)
         cv2.namedWindow('Circuladas', cv2.WINDOW_NORMAL)
         cv2.imshow('Circuladas', imagem)
-        cv2.resizeWindow('Circuladas', h//2, w//2)
+        cv2.resizeWindow('Circuladas', h//4, w//4)
 
     return circulos_filtrados

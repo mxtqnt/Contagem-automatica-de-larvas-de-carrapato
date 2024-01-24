@@ -38,7 +38,7 @@ def encontrar_mais_recorrentes(larvas_frame):
             print(f"Valor: {valor}, Recorrência: {frequencia}")
 
     mais_recorrente = max(tres_maiores, key=lambda x: x[1])
-    print(f"\nO valor mais recorrente é {mais_recorrente[0]} com {mais_recorrente[1]} ocorrências.")
+    print(f"A quantidade de larvas é {mais_recorrente[0]}.")
 
     return mais_recorrente[0]
 
