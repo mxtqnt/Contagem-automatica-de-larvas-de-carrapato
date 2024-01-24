@@ -14,8 +14,6 @@ Coletar video de duração suficiente em ambiente controlado com contraste ao fu
 |Larvas saindo da área de cobertura | Em andamento|
 
 ### Segunda fase 
-
-
 Reconhecer larvas pelo tratamento de cada frame de forma individual e fazer a contagem de larvas detectadas por frame.     
 
 <img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true" alt="frame tratado" width="50%" height="50%">
