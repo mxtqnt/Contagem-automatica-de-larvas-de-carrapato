@@ -1,3 +1,3 @@
-VERBOSO = False
+VERBOSO = True
 DEBUG = False
-SINALIZAR = True
+SINALIZAR = False
