@@ -11,6 +11,9 @@ Coletar video de duração suficiente em ambiente controlado com contraste ao fu
 
 
 
+
+
+
 |Problema   | Status|
 | ------------- | ------------- |
 |Necessidade de video com câmera estática | Solucionado|
