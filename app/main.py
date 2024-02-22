@@ -61,6 +61,7 @@ for numero_video, video in enumerate(os.listdir(caminho), start=1):
     matrizcsv.append([0] * 4)
     matrizcsv[numero_video][0], matrizcsv[numero_video][1], matrizcsv[numero_video][2], matrizcsv[numero_video][3] = video, vivas, mortas, str(time.time() - time_inicio)
 
+print("Preenchendo planilha...")
 
 with open('AnaliseVideos.csv', 'w', newline='') as arquivo_csv:
     escritor_csv = csv.writer(arquivo_csv)
