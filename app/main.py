@@ -6,7 +6,7 @@ from tratamento import crop_video
 from selecao import encontrar_mais_recorrentes, encontrar_maior_intervalo_sequencial
 from analisar import acompanhar_larvas, acompanhar_larvas_mortas
 
-caminho = 'videos\\' 
+caminho = "videos\\"
 
 matrizcsv = []
 matrizcsv.append([0] * 4)

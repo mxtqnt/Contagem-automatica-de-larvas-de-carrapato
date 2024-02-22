@@ -33,6 +33,7 @@ def crop_video(caminho_video):
             data = { "frame" : i,
                     "contagem": len(circulos_frame),
                     "cordenadas" : circulos_frame}
+
             larvas_por_frame.append(data)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
