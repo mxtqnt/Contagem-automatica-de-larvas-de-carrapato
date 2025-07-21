@@ -1,36 +1,32 @@
 # Contagem Automática de Larvas de Carrapato
 
-Objetivo é automatizar o processo de contagem de larvas sobreviventes aos agentes selecionados, para o Doutorado de Isabela Santos - UFG.
+## Objetivo
 
-### Primeira fase
-Coletar video de duração suficiente em ambiente controlado com contraste ao fundo.      
+Este repositório apresenta um sistema automatizado para análise e contagem de larvas de carrapato em vídeos, distinguindo entre larvas vivas e mortas. A ferramenta é destinada a facilitar pesquisas e monitoramentos em ambientes laboratoriais, proporcionando uma análise rápida e precisa do comportamento dos parasitas.
 
-<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true" alt="frame original" width="50%" height="50%">
+## Descrição
 
-|Problema   | Status|
-| ------------- | ------------- |
-|Necessidade de video com câmera estática | Solucionado|
-|Maior qualidade na gravação | Solucionado|
-|Larvas saindo da área de cobertura | Em andamento|
+O sistema processa vídeos armazenados em uma pasta específica, executando as seguintes etapas:
 
-### Segunda fase 
-Reconhecer larvas pelo tratamento de cada frame de forma individual e fazer a contagem de larvas detectadas por frame.     
+- Corte e pré-processamento dos frames do vídeo para focar nas regiões de interesse.
+- Identificação do número mais recorrente de larvas detectadas por frame.
+- Determinação do maior intervalo sequencial em que a contagem é consistente.
+- Análise detalhada para classificação das larvas como vivas ou mortas com base em movimento e comportamento.
+- Geração de uma planilha CSV com os resultados da análise, incluindo contagem de larvas vivas, mortas e tempo total de processamento.
 
-<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true" alt="frame tratado" width="50%" height="50%">
+Além disso, para cada vídeo, imagens ou vídeos são gerados destacando as larvas mortas para facilitar validação visual dos resultados.
 
-|Problema   | Status|
-| ------------- | ------------- |
-|Ruído ao fundo, reconhecendo falhas no papel como larvas. | Em andamento|
+## Estrutura do Repositório
 
-### Terceira fase
-Sinalizar a área de cada larva.     
+- `videos/` – Pasta contendo os vídeos originais a serem analisados.
+- `tratamento.py` – Funções para corte e pré-processamento dos vídeos.
+- `selecao.py` – Algoritmos para identificar contagens recorrentes e intervalos sequenciais.
+- `analisar.py` – Funções para acompanhamento e classificação das larvas ao longo dos frames.
+- `AnaliseVideos.csv` – Arquivo gerado com o resumo das análises após execução.
+  
 
-<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/circuladas.png?raw=true" alt="larvas circuladas" width="50%" height="50%">
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/original.png?raw=true" alt="frame original" width="25%%" height="25%">
 
-|Problema   | Status|
-| ------------- | ------------- |
-|Larvas muito próximas | Em andamento|
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/contagem.png?raw=true" alt="frame tratado" width="25%" height="25%">
 
-## Próximas fases
-- Traçar a movimentação de cada larva e diagnosticar atividade ou não.
-- Inserir dados na base.
+<img src="https://github.com/mxtqnt/Contagem-automatica-de-larvas-de-carrapato/blob/main/imgreadme/circuladas.png?raw=true" alt="larvas circuladas" width="25%" height="25%">
